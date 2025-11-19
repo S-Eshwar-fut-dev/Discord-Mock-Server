@@ -1,0 +1,60 @@
+openapi: 3.1.0
+info:
+  title: Eoncord Mock API
+  description: Mock API for frontend development (Express + WS)
+  version: "0.1.0"
+servers:
+  - url: http://localhost:4000
+paths:
+  /api/auth/login:
+    post:
+      summary: Login (mock)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+      responses:
+        "200":
+          description: OK
+  /api/guilds:
+    get:
+      summary: List guilds
+      responses:
+        "200":
+          description: OK
+  /api/channels:
+    get:
+      summary: List channels (optional guildId)
+      parameters:
+        - name: guildId
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+  /api/messages:
+    get:
+      summary: List messages (paginated)
+      parameters:
+        - name: channelId
+          in: query
+          schema:
+            type: string
+          required: true
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
