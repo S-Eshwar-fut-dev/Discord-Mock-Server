@@ -31,8 +31,8 @@ function isOriginAllowed(origin: string | undefined): boolean {
 }
 
 export function createWSServer(server: HttpServer) {
-  const wss = new WebSocketServer({ 
-    server, 
+  const wss = new WebSocketServer({
+    server,
     path: "/ws",
     verifyClient: (info: { origin: string; secure: boolean; req: any }) => {
       const origin = info.origin;
@@ -41,7 +41,7 @@ export function createWSServer(server: HttpServer) {
         return false;
       }
       return true;
-    }
+    },
   });
 
   function broadcast(obj: any) {
@@ -71,15 +71,30 @@ export function createWSServer(server: HttpServer) {
     ws.on("message", (raw) => {
       try {
         const data = JSON.parse(raw.toString());
-        
+
         if (data?.type === "presence:set") {
           broadcast({ type: "presence:update", payload: data.payload });
+          return;
+        }
+        if (data?.type === "reaction:add") {
+          broadcast({
+            type: "reaction:add",
+            payload: data.payload,
+          });
+          return;
+        }
+
+        if (data?.type === "reaction:remove") {
+          broadcast({
+            type: "reaction:remove",
+            payload: data.payload,
+          });
           return;
         }
 
         if (data?.type === "message:create") {
           const { payload } = data;
-          
+
           // Validate required fields
           if (!payload?.channelId || !payload?.content) {
             console.warn("[WS] Invalid message:create payload:", payload);
@@ -114,10 +129,12 @@ export function createWSServer(server: HttpServer) {
         console.error("[WS] Error parsing message:", err);
         // Send error back to client
         try {
-          ws.send(JSON.stringify({ 
-            type: "error", 
-            payload: { message: "Invalid message format" } 
-          }));
+          ws.send(
+            JSON.stringify({
+              type: "error",
+              payload: { message: "Invalid message format" },
+            })
+          );
         } catch (sendErr) {
           console.error("[WS] Error sending error response:", sendErr);
         }
