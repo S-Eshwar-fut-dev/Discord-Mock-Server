@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { MESSAGES, USERS } from "../src/mock/data";
-import { paginate } from "../src/utils/pagination";
+import { MESSAGES, USERS } from "../mock/data";
+import { paginate } from "../utils/pagination";
 import { v4 as uuid } from "uuid";
 
 const router = Router();

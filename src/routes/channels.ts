@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CHANNELS } from "../src/mock/data";
+import { CHANNELS } from "../mock/data";
 
 const router = Router();
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { v4 as uuid } from "uuid";
-import { SESSIONS, USERS } from "../src/mock/data";
+import { SESSIONS, USERS } from "../mock/data";
 
 const router = Router();
 

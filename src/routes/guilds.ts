@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { GUILDS } from "../src/mock/data";
+import { GUILDS } from "../mock/data";
 
 const router = Router();
 
